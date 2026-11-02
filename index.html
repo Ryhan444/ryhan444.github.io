@@ -335,6 +335,8 @@
         .status.dev::before { background: #fbbf24; }
         .status.trial::before { background: #60a5fa; }
         .region { font-size: 0.82rem; color: var(--muted); white-space: nowrap; }
+        .show-more { margin: 18px auto 0; display: flex; }
+        .show-more[hidden] { display: none; }
         .empty { padding: 40px; text-align: center; color: var(--muted); display: none; }
         .table-note { margin-top: 14px; font-size: 0.82rem; color: var(--dim); }
 
@@ -482,33 +484,135 @@
             .float-card .fi { width: 32px; height: 32px; flex: none; }
             .float-card b { font-size: 1.05rem; }
             .float-card span { font-size: 0.74rem; line-height: 1.3; display: block; }
-            .about-grid, .skills-grid, .featured, .tl-points, .tl-mini, .code-grid { grid-template-columns: 1fr; }
+            .about-grid, .skills-grid, .tl-points, .tl-mini, .code-grid { grid-template-columns: 1fr; }
+            /* Featured projects become a swipeable carousel */
+            .container .swipe-hint { display: flex; }
+            .featured {
+                display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px;
+                margin: 0 -24px 56px; padding: 4px 24px 16px; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+            }
+            .featured::-webkit-scrollbar { display: none; }
+            .featured .proj { flex: 0 0 min(72%, 420px); scroll-snap-align: center; }
             .code-grid { gap: 34px; }
             section { padding: 76px 0; }
             .sapa { padding: 28px 22px; }
             thead { display: none; }
             table, tbody, tr, td { display: block; width: 100%; }
-            tbody tr { padding: 16px 18px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: auto 1fr auto; gap: 4px 12px; }
+            tbody tr { padding: 14px 16px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 26px 1fr auto; gap: 2px 10px; align-items: center; }
             tbody tr:last-child { border-bottom: 0; }
-            tbody td { padding: 0; border: 0; }
-            td.num { width: auto; grid-row: 1; }
-            td.pname { grid-row: 1; white-space: normal; overflow-wrap: anywhere; }
-            td.st { grid-row: 1; }
+            tbody td { padding: 0; border: 0; width: auto; }
+            td.num { grid-row: 1; grid-column: 1; }
+            td.pname { grid-row: 1; grid-column: 2; white-space: normal; overflow-wrap: anywhere; line-height: 1.35; }
+            td.vt { grid-row: 1; grid-column: 3; }
+            td.sst { grid-row: 2; grid-column: 2 / -1; }
             td.region { display: none; }
-            td.scope { grid-column: 1 / -1; font-size: 0.88rem; }
+            td.scope { grid-row: 3; grid-column: 2 / -1; font-size: 0.86rem; margin-top: 4px; }
             .search { min-width: 0; flex: 1; }
         }
         @media (max-width: 560px) {
             .container { padding: 0 16px; }
-            .stats { grid-template-columns: repeat(2, 1fr); }
+            section { padding: 60px 0; }
+            .sec-head { margin-bottom: 30px; }
+            .sec-head p { font-size: 0.96rem; }
+            .card { padding: 20px; border-radius: 16px; }
+
+            /* Nav */
+            .nav-inner { height: 62px; }
+            .logo { font-size: 1rem; gap: 8px; white-space: nowrap; }
+            .logo-mark { height: 32px; min-width: 40px; }
+            .icon-btn { width: 38px; height: 38px; }
+            .nav-links { top: 62px; }
+
+            /* Hero */
+            .hero { padding: 92px 0 36px; }
+            .hero-grid { gap: 32px; }
+            .portrait-wrap { width: 100%; max-width: 360px; }
+            .badge { font-size: 0.76rem; margin-bottom: 18px; }
+            .hero h1 { font-size: 2.5rem; margin-bottom: 12px; }
+            .hero .role { font-size: 1rem; margin-bottom: 14px; }
+            .hero .lead { font-size: 0.98rem; margin-bottom: 24px; }
+            .hero-cta { gap: 10px; margin-bottom: 24px; }
+            .hero-cta .btn { flex: 1; justify-content: center; padding: 13px 16px; }
+            .stats { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 40px; }
             .stats .stat:last-child { grid-column: 1 / -1; }
-            .comp-grid, .contact-grid, .modules { grid-template-columns: 1fr; }
-            .edu { padding: 24px; }
-            .gpa { text-align: left; }
-            .contact-box { padding: 50px 18px; }
+            .stat { padding: 16px; }
+            .stat b { font-size: 1.75rem; }
+            .stat span { font-size: 0.8rem; }
+
+            /* About */
+            .about-text p { font-size: 0.96rem; margin-bottom: 14px; }
+            .info-list li { padding: 11px 0; font-size: 0.88rem; }
+            .info-list .k { white-space: nowrap; }
+
+            /* Expertise: compact rows with icon on the left */
+            .comp-grid { grid-template-columns: 1fr; gap: 12px; }
+            .comp { display: grid; grid-template-columns: auto 1fr; column-gap: 14px; align-items: start; }
+            .comp-icon { grid-row: span 2; width: 40px; height: 40px; margin-bottom: 0; border-radius: 11px; }
+            .comp-icon svg { width: 19px; height: 19px; }
+            .comp h3 { font-size: 1.02rem; margin: 8px 0 6px; }
+            .comp p { font-size: 0.88rem; }
+
+            /* Code */
+            .checks { gap: 12px; margin-top: 20px; }
+            .checks li { font-size: 0.9rem; }
+            .code-bar { padding: 11px 12px; }
+            .code-bar span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; font-size: 0.7rem; }
+            .code-bar em { white-space: nowrap; flex: none; }
+            .code-win pre { font-size: 0.7rem; padding: 14px 0 16px; }
+            .code-win .l::before { width: 34px; padding-right: 12px; }
+
+            /* Experience */
+            .timeline { padding-left: 22px; gap: 16px; }
+            .timeline::before { left: 4px; }
+            .tl-item::before { left: -24px; top: 24px; }
+            .tl-head { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .tl-head h3 { font-size: 1.08rem; }
+            .tl-company { font-size: 0.88rem; margin-bottom: 12px; }
+            .tl-points { gap: 8px; }
+            .tl-point { padding: 12px 14px; font-size: 0.86rem; }
+            .tl-mini { gap: 10px; }
+            .tl-mini .card { padding: 16px 18px; }
+            .tl-mini h3 { font-size: 0.98rem; }
+            .tl-mini .tl-company { font-size: 0.84rem; }
+
+            /* SAPA */
+            .sapa { padding: 24px 18px; border-radius: 20px; gap: 28px; }
+            .sapa li { font-size: 0.9rem; }
+            .modules { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .module { padding: 10px 12px; font-size: 0.85rem; gap: 10px; }
+            .module i { width: 26px; height: 26px; font-size: 0.85rem; }
+
+            /* Projects */
+            .featured { margin: 0 -16px 48px; padding: 4px 16px 14px; gap: 12px; }
+            .featured .proj { flex-basis: 86%; }
+            .marquee .chip { font-size: 0.8rem; padding: 8px 14px; }
+            .all-head h3 { font-size: 1.3rem; }
+            .filters { width: 100%; }
             .tabs { width: 100%; justify-content: space-between; }
-            .tab { padding: 8px 10px; }
+            .tab { padding: 8px 10px; flex: 1; }
+            .search { width: 100%; }
+
+            /* Skills / education / contact */
+            .contact-grid { grid-template-columns: 1fr; gap: 10px; margin-top: 34px; }
+            .edu { padding: 22px; gap: 18px; }
+            .edu-left { gap: 14px; }
+            .edu-icon { width: 48px; height: 48px; border-radius: 14px; }
+            .edu h3 { font-size: 1.12rem; }
+            .gpa { text-align: left; }
+            .gpa b { font-size: 2.2rem; }
+            .contact-box { padding: 44px 16px 18px; border-radius: 24px; }
+            .contact-box > p { font-size: 0.96rem; margin-bottom: 26px; }
+            .foot { justify-content: center; text-align: center; }
+            .to-top { right: 14px; bottom: 14px; }
         }
+        @media (max-width: 360px) {
+            .logo-name { display: none; }
+            .hero h1 { font-size: 2.2rem; }
+            .modules { grid-template-columns: 1fr; }
+        }
+        .swipe-hint { display: none; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--dim); margin: -14px 0 14px; font-family: "JetBrains Mono", monospace; }
+        .swipe-hint svg { width: 16px; height: 16px; animation: nudge 1.6s ease-in-out infinite; }
+        @keyframes nudge { 50% { transform: translateX(5px); } }
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after { animation: none !important; transition: none !important; }
             html { scroll-behavior: auto; }
@@ -528,7 +632,7 @@
     <!-- ================= NAV ================= -->
     <nav class="nav" id="nav">
         <div class="container nav-inner">
-            <a href="#home" class="logo"><span class="logo-mark">ARA</span>Achmad Rayhan Alief</a>
+            <a href="#home" class="logo"><span class="logo-mark">ARA</span><span class="logo-name">Achmad Rayhan Alief</span></a>
             <div class="nav-links" id="navLinks">
                 <a href="#about">About</a>
                 <a href="#expertise">Expertise</a>
@@ -638,7 +742,7 @@
                     </div>
                     <div class="card reveal d1">
                         <ul class="info-list">
-                            <li><span class="k">Current role</span><span class="v">ERP Odoo Developer (Senior 1)</span></li>
+                            <li><span class="k">Current role</span><span class="v">ERP Odoo Developer (Senior 2)</span></li>
                             <li><span class="k">Company</span><span class="v">PT. Falinwa Indonesia</span></li>
                             <li><span class="k">Focus</span><span class="v">Odoo 17 · 18 · 19</span></li>
                             <li><span class="k">Regions served</span><span class="v">Southeast Asia &amp; Europe</span></li>
@@ -816,6 +920,9 @@
                     <p>Client projects delivered at PT. Falinwa Indonesia on Odoo.sh — a closer look at the most feature-rich ones.</p>
                 </div>
 
+                <p class="swipe-hint">Swipe to explore
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                </p>
                 <div class="featured" id="featured"></div>
 
                 <div class="reveal">
@@ -853,6 +960,7 @@
                     </table>
                     <div class="empty" id="empty">No projects match your search.</div>
                 </div>
+                <button class="btn btn-ghost show-more" id="more" type="button"></button>
                 <p class="table-note">SEA = Southeast Asia. Scope is summarised from the custom modules delivered per project; "Implementation &amp; support" marks projects covered by configuration, maintenance and support.</p>
             </div>
         </section>
@@ -1056,18 +1164,30 @@
         const emptyEl = document.getElementById("empty");
         const statusLabel = { prod: ["Production", ""], dev: ["Development", "dev"], trial: ["Prod · trial", "trial"] };
         let curV = "all";
+        let expanded = false;
+        const LIMIT = 8;
+        const moreBtn = document.getElementById("more");
+        moreBtn.addEventListener("click", () => {
+            expanded = !expanded;
+            renderRows();
+            if (!expanded) document.querySelector(".table-wrap").scrollIntoView({ block: "start" });
+        });
         function renderRows() {
             const q = document.getElementById("q").value.trim().toLowerCase();
             const list = projects
                 .map((p, i) => ({ i: i + 1, v: p[0], name: p[1], st: p[2], reg: p[3], scope: p[4] }))
                 .filter((p) => (curV === "all" || String(p.v) === curV) && (!q || (p.name + " " + p.scope).toLowerCase().includes(q)));
-            rowsEl.innerHTML = list.map((p) => {
+            const collapsible = !q && list.length > LIMIT;
+            moreBtn.hidden = !collapsible;
+            moreBtn.textContent = expanded ? "Show less" : `Show all ${list.length} projects`;
+            const shown = collapsible && !expanded ? list.slice(0, LIMIT) : list;
+            rowsEl.innerHTML = shown.map((p) => {
                 const [lbl, cls] = statusLabel[p.st];
                 return `<tr>
                     <td class="num">${String(p.i).padStart(2, "0")}</td>
                     <td class="pname">${esc(p.name)}</td>
-                    <td class="st"><span class="ver v${p.v}">v${p.v}</span></td>
-                    <td class="st"><span class="status ${cls}">${lbl}</span></td>
+                    <td class="vt"><span class="ver v${p.v}">v${p.v}</span></td>
+                    <td class="sst"><span class="status ${cls}">${lbl}</span></td>
                     <td class="region">${p.reg}</td>
                     <td class="scope">${esc(p.scope)}</td>
                 </tr>`;
